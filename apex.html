@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apex</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        * {margin: 0; padding: 0; box-sizing: border-box;}
+
+        body {
+            background: #060a0f;
+            color: #f0ece4;
+            font-family: 'dm mono', monospace;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .onboard {
+            width: 100%;
+            max-width: 520px;
+            padding: 48px 32px;
+            animation: fadeup 0.6s ease both;
+        }
+
+        @keyframes fadeup {
+            from {opacity: 0; transform: translateY(24px); }
+            to {opacity: 1; transform: translateY(0); }
+        }
+
+        .apex-logo { 
+            font-family: 'Syne', sans-serif;
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: 8px;
+            color:  #f0ece4;
+            margin-bottom: 8px;
+        }
+
+        .apex-tagline {
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: #444;
+            text-transform: uppercase;
+            margin-bottom: 48px;
+        }
+
+        .step { display: none; }
+        .step.activate {
+            display:  block;
+            animation: fadeup 0.4s ease both;
+        }
+        
+        .step-label {
+            font-size: 10px;
+            letter-spacing: 4px;
+            color: #444;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+        
+        .step-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #f0ece4;
+            margin-bottom: 32px;
+            line-height: 1.2;
+        }
+        
+        input[type="text"]
+        input[type="number"] {
+           width: 100%;
+           background: #0d1117;
+           border: 1px solid #1e2530;
+           color: #f0ece4;
+           padding: 16px 20px;
+           font-family: 'dm mono', monospace;
+           font-size: 16px;
+           outline: none;
+           margin-bottom: 16px;
+           transition: border-color 0.2s;
+        }
+
+        input:focus { border-color: #f0ece4; }
+
+        .btn {
+            width: 100%;
+            background: #f0ece4;
+            color: #060a0f;
+            border: none;
+            padding: 18px;
+            font-family: 'Syne', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-transform: uppercase;
+            margin-top: 8px;
+        }
+
+        .btn:hover { background: #ccc; }
+
+        .progress {
+            display: flex;
+            gap: 6px;
+            margin-top: 40px;
+        }
+
+        .progress-dot {
+            height: 3px;
+            flex: 1;
+            background: #1e2530;
+            transition: background 0.3s;
+        }
+
+        .progress-dot.done { background: #f0ece4; }
+
+        .goal-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+
+        .goal-item {
+            border: 1px solid #1e2530;
+            padding: 14px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size:11px;
+            letter-spacing: 1px;
+            color: #888;
+        }
+
+        .goal-item:hover { border-color: #444; color: #f0ece4; }
+        .goal-item.selected { border-color: #f0ece4; background: #0d1117; }
+
+        .goal-icon { font-size: 20px; margin-bottom: 6px; }
+
+        .archetype-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+
+        .archetype-card{
+            border: 1px solid #1e2530;
+            padding: 20px 16px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .archetype-card:hover { border-color: #444;}
+        .archetype-card.selected {border-color: #f0ece4;}
+
+        .archetype-icon { font-size: 28px; margin-bottom: 8px; }
+
+        .archetype-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            margin-bottom: 4px;
+        }
+
+        .archetype-desc{
+            font-size: 10px;
+            color: #667;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+        <div class="onboard">
+            <div class="apex-logo">APEX</div>
+            <div class="apex-tagline">// Become the best version of yourself</div>
+
+            <div class="progress">
+                <div class="progress-dot" id="dot-0"></div>
+                <div class="progress-dot" id="dot-1"></div>
+                <div class="progress-dot" id="dot-2"></div>
+                <div class="progress-dot" id="dot-3"></div>
+            </div>
+
+            <div class="step active" id="step-0">
+                <div class="step-label">step 1 of 4</div>
+                <div class="step-title">Who are you,<br>warrior?</div>
+                <input type="text" id="input-name" placeholder="Your name" />
+                <input type="number" id="input-age" placeholer="Your age" min="6" max="100" />
+                <button class="btn" onclick="nextStep(0)">Continue -></button>
+            </div>
+            <div class="step" id="step-1">
+                <div class="step-label">Step 2 of 4</div>
+                <div class="step-title">What are you<br>building?</div>
+                <div class="goal-grid">
+                    <div class="goal-item" onclick="toggleGoal(this, 'Fitness')">
+                        <div class="goal-icon">💪</div>Fitness
+                    </div>
+                    <div class="goal-item" onclick="togglegoal(this, 'Focus')">
+                        <div class="goal-icon">🎯</div>Focus
+                    </div>
+                    <div class="goal-item" onclick="togglegoal(this, 'Wealth')">
+                        <div class="goal-icon">💰</div>Wealth
+                    </div>
+                    <div class="goal-item" onclick="togglegoal(this, 'Confidence')">
+                        <div class="goal-icon">⚡</div>Confidence
+                    </div>
+                    <div class="goal-item" onclick="togglegoal(this, 'Discipline')">
+                        <div class="goal-icon">🔒</div>Discipline
+                    </div>
+                    <div class="goal-item" onclick="togglegoal(this, 'Skills')">
+                        <div class="goal-icon">🧠</div>Skills
+                    </div>
+                    <div class="goal-item" onclick="togglegoal(this, 'Nutrition')">
+                        <div class="goal-icon">🥗</div>Nutrition
+                    </div>
+                    <div class="goal-item" onclick="togglegoal(this, 'Sleep')">
+                        <div class="goal-icon">😴</div>Sleep
+                    </div>
+                    <div class="goal-item" onclick="togglegoal(this, 'Spirit')">
+                        <div class="goal-icon">🙏</div>Spirit
+                    </div>
+                </div>
+                <button class="btn" onclick="nextStep(1)">Continue -></button>
+            </div>
+
+            <div class="step" id="step-2">
+                <div class="step-label">Step 3 of 4</div>
+                <div class="step-title">Choose your<br>archetype.</div>
+                <div class="archetype-grid">
+                    <div class="archetype-card" onclick="selectArchetype(this, 'warrior', '#ef4444')">
+                        
+                    </div>
+
+
+
+
+
+
+
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+
+</body>
+</html>
